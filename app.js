@@ -31,7 +31,17 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 mongoose.set("strictQuery", "true");
-mongoose.connect("mongodb://localhost:27017/userDB");
+// mongoose.connect("mongodb://localhost:27017/userDB");
+
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(process.env.MONGO_DB_URL);
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.log(error);
+    process.exit(1);
+  }
+}
 
 const userSchema = new mongoose.Schema({
   email: String,
@@ -227,6 +237,9 @@ app.get("/logout", function (req, res) {
   });
 });
 
-app.listen(3000, function () {
-  console.log("Server stared successfully on port 3000");
-});
+//Connect to the database before listening
+connectDB().then(() => {
+    app.listen(process.env.PORT || 3000, () => {
+        console.log("listening for requests");
+    })
+})
