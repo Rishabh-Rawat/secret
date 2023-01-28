@@ -132,15 +132,15 @@ app.post("/submit", async function (req, res) {
     { _id: req.user._id },
     { secret: submittedSecret },
     function (err, foundUser) {
-//       if (err) {
-//         console.log(err);
-//       } else {
-//         if (foundUser) {
+      if (err) {
+        console.log(err);
+      } else {
+        if (foundUser) {
           res.redirect("/secrets");
-//         } else {
-//           res.send("Failed");
-//         }
-//       }
+        } else {
+          res.send("Failed");
+        }
+      }
     }
   );
 });
