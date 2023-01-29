@@ -128,6 +128,8 @@ app.get("/submit", function (req, res) {
 
 app.post("/submit", function (req, res) {
   const submittedSecret = req.body.secret;
+  console.log(submittedSecret);
+  console.log(req.user);
   User.findOneAndUpdate(
     { _id: req.user._id },
     { secret: submittedSecret },
