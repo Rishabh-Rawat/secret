@@ -126,9 +126,9 @@ app.get("/submit", function (req, res) {
   }
 });
 
-app.post("/submit", async function (req, res) {
+app.post("/submit", function (req, res) {
   const submittedSecret = req.body.secret;
-  await User.findOneAndUpdate(
+  User.findOneAndUpdate(
     { _id: req.user._id },
     { secret: submittedSecret },
     function (err, foundUser) {
