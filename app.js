@@ -22,8 +22,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
   session({
     secret: "Our little secret.",
-    resave: false,
-    saveUninitialized: false,
+    resave: true,
+    saveUninitialized: true,
+    cookie: { maxAge: 60 * 60 * 24 * 1000 },
   })
 );
 
@@ -67,8 +68,8 @@ passport.use(
     {
       clientID: process.env.CLIENT_ID,
       clientSecret: process.env.CLIENT_SECRET,
-      callbackURL: "http://localhost:3000/auth/google/secrets",
-      // callbackURL: process.env.CYCLIC_URL + "/auth/google/secrets",
+      // callbackURL: "http://localhost:3000/auth/google/secrets",
+      callbackURL: process.env.CYCLIC_URL + "/auth/google/secrets",
     },
     function (accessToken, refreshToken, profile, cb) {
       // console.log(profile);
@@ -119,7 +120,7 @@ app.get("/register", function (req, res) {
 });
 
 app.get("/submit", function (req, res) {
-  console.log("Submit route: ", req.user);
+  console.log("Submit route : ", req.user);
   if (req.isAuthenticated()) {
     res.render("submit");
   } else {
@@ -130,7 +131,7 @@ app.get("/submit", function (req, res) {
 app.post("/submit", function (req, res) {
   const submittedSecret = req.body.secret;
   console.log(submittedSecret);
-  console.log(req.user);
+  console.log("Submit post route : ", req.user);
   User.findOneAndUpdate(
     { _id: req.user._id },
     { secret: submittedSecret },
@@ -185,7 +186,7 @@ app.post("/submit", function (req, res) {
 // });
 
 app.get("/secrets", function (req, res) {
-  console.log("Secrets route: ", req.user);
+  console.log("Secrets route : ", req.user);
   User.find({ secret: { $ne: null } }, function (err, foundUsers) {
     if (err) {
       console.log(err);
