@@ -41,7 +41,7 @@ const connectDB = async () => {
     console.log(error);
     process.exit(1);
   }
-}
+};
 
 const userSchema = new mongoose.Schema({
   email: String,
@@ -67,8 +67,8 @@ passport.use(
     {
       clientID: process.env.CLIENT_ID,
       clientSecret: process.env.CLIENT_SECRET,
-//       callbackURL: "http://localhost:3000/auth/google/secrets",
-      callbackURL: process.env.CYCLIC_URL + "/auth/google/secrets",
+      callbackURL: "http://localhost:3000/auth/google/secrets",
+      // callbackURL: process.env.CYCLIC_URL + "/auth/google/secrets",
     },
     function (accessToken, refreshToken, profile, cb) {
       // console.log(profile);
@@ -206,6 +206,7 @@ app.post("/register", function (req, res) {
         res.redirect("/register");
       } else {
         passport.authenticate("local")(req, res, function () {
+          console.log("Authenticated from register page");
           res.redirect("/secrets");
         });
       }
@@ -224,6 +225,7 @@ app.post("/login", function (req, res) {
       console.log(err);
     } else {
       passport.authenticate("local")(req, res, function () {
+        console.log("Authenticated from login page");
         res.redirect("/secrets");
       });
     }
@@ -242,7 +244,7 @@ app.get("/logout", function (req, res) {
 
 //Connect to the database before listening
 connectDB().then(() => {
-    app.listen(process.env.PORT || 3000, () => {
-        console.log("listening for requests");
-    })
-})
+  app.listen(process.env.PORT || 3000, () => {
+    console.log("listening for requests");
+  });
+});
