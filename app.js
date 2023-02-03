@@ -184,6 +184,7 @@ app.post("/submit", function (req, res) {
 // });
 
 app.get("/secrets", function (req, res) {
+  console.log(req.user);
   User.find({ secret: { $ne: null } }, function (err, foundUsers) {
     if (err) {
       console.log(err);
@@ -207,7 +208,7 @@ app.post("/register", function (req, res) {
       } else {
         passport.authenticate("local")(req, res, function () {
           console.log("Authenticated from register page");
-          console.log(req.user);
+          // console.log(req.user);
           res.redirect("/secrets");
         });
       }
@@ -227,7 +228,7 @@ app.post("/login", function (req, res) {
     } else {
       passport.authenticate("local")(req, res, function () {
         console.log("Authenticated from login page");
-        console.log(req.user);
+        // console.log(req.user);
         res.redirect("/secrets");
       });
     }
