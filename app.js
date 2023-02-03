@@ -119,6 +119,7 @@ app.get("/register", function (req, res) {
 });
 
 app.get("/submit", function (req, res) {
+  console.log("Submit route: ", req.user);
   if (req.isAuthenticated()) {
     res.render("submit");
   } else {
@@ -184,7 +185,7 @@ app.post("/submit", function (req, res) {
 // });
 
 app.get("/secrets", function (req, res) {
-  console.log(req.user);
+  console.log("Secrets route: ", req.user);
   User.find({ secret: { $ne: null } }, function (err, foundUsers) {
     if (err) {
       console.log(err);
